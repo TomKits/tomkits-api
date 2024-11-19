@@ -18,7 +18,7 @@ Follow these steps to set up and run the application:
 ```bash
 git clone <repository-url>
 cd <repository-folder>```
-
+```
 ### **2. Create and Activate a Virtual Enviroment**
 - Linux/macOS
 ```bash
