@@ -1,6 +1,6 @@
 # **TOMKITS API**
 
-TOMKITS API is a RESTful API built with Flask to manage user authentication and operations using JWT tokens. This guide provides the steps to set up, run, and use the API.
+TOMKITS API is a RESTful API built with Flask to handle the back-end operation for tomkits app
 
 ---
 
