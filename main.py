@@ -26,12 +26,12 @@ def create_app():
         return User.query.filter_by(username=identity).one_or_none()
 
     #additional claims
-    @jwt.additional_claims_loader
-    def make_additional_claims(identity):
-
-        if identity == "aditya123":
-            return {"is_staff":True}
-        return{"is_staff":False}
+#    @jwt.additional_claims_loader
+#    def make_additional_claims(identity):
+#
+#        if identity == "aditya123":
+#            return {"is_staff":True}
+#        return{"is_staff":False}
 
 
 
