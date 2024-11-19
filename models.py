@@ -44,7 +44,7 @@ class User(db.Model):
 
 
 class TokenBlocklist(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.String(), primary_key=True, default=lambda: str(uuid4()))
     jti = db.Column(db.String(), nullable=True)
     create_at = db.Column(db.DateTime(), default=datetime.utcnow)
 
