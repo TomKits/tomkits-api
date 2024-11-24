@@ -1,60 +1,65 @@
 from flask import Flask, jsonify
 from extensions import db, jwt
 from auth import auth_bp
+from predict import predict_bp
 from users import user_bp
 from models import User, TokenBlocklist
 
-def create_app():
 
+def create_app():
 
     app = Flask(__name__)
 
     app.config.from_prefixed_env()
 
-    #initialize exts
+    # initialize exts
     db.init_app(app)
     jwt.init_app(app)
 
-    #register blueprints
-    app.register_blueprint(auth_bp,url_prefix='/auth')
-    app.register_blueprint(user_bp,url_prefix='/users')
+    # register blueprints
+    app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(user_bp, url_prefix="/users")
+    app.register_blueprint(predict_bp, url_prefix="/predict")
 
-    #load users
+    # load users
     @jwt.user_lookup_loader
-    def user_lookup_callback(_jwt_headers,jwt_data):
-        identity = jwt_data['sub']
+    def user_lookup_callback(_jwt_headers, jwt_data):
+        identity = jwt_data["sub"]
         return User.query.filter_by(username=identity).one_or_none()
 
-    #additional claims
-#    @jwt.additional_claims_loader
-#    def make_additional_claims(identity):
-#
-#        if identity == "aditya123":
-#            return {"is_staff":True}
-#        return{"is_staff":False}
-
-
-
-    #jwt error handlers
+    # jwt error handlers
     @jwt.expired_token_loader
-    def expired_token_callback(jwt_header,jwt_data):
-        return jsonify({"message":"Token has Expired", "error":"token_expired"}),401
-    
+    def expired_token_callback(jwt_header, jwt_data):
+        return jsonify({"message": "Token has Expired", "error": "token_expired"}), 401
 
     @jwt.invalid_token_loader
     def invalid_token_callback(error):
-        return jsonify({"message":"Signature verification failed", "error":"invalid_token"}),401
-    
+        return (
+            jsonify(
+                {"message": "Signature verification failed", "error": "invalid_token"}
+            ),
+            401,
+        )
+
     @jwt.unauthorized_loader
     def missing_token_callback(error):
-        return jsonify({"message":"Request doesnt contain valid token", "error":"authorization_header "}),401
-
+        return (
+            jsonify(
+                {
+                    "message": "Request doesnt contain valid token",
+                    "error": "authorization_header ",
+                }
+            ),
+            401,
+        )
 
     @jwt.token_in_blocklist_loader
-    def token_in_blocklist_callback(jwt_header,jwt_data):
-        jti = jwt_data['jti']
+    def token_in_blocklist_callback(jwt_header, jwt_data):
+        jti = jwt_data["jti"]
 
-        token= db.session.query(TokenBlocklist).filter(TokenBlocklist.jti == jti).scalar()
+        token = (
+            db.session.query(TokenBlocklist).filter(TokenBlocklist.jti == jti).scalar()
+        )
 
         return token is not None
 
