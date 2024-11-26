@@ -56,6 +56,10 @@ class User(db.Model):  # Use db.Model instead of Base
 
     histories = relationship("History", back_populates="user")
 
+    def __init__(self, username: str, email: str) -> None:
+        self.username = username
+        self.email = email
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
@@ -63,8 +67,8 @@ class User(db.Model):  # Use db.Model instead of Base
         return check_password_hash(self.password, password)
 
     @classmethod
-    def get_user_by_username(cls, username):
-        return cls.query.filter_by(username=username).first()
+    def get_user_by_email(cls, email: str):
+        return cls.query.filter_by(email=email).first()
 
     @classmethod
     def get_user_by_id(cls, id):
