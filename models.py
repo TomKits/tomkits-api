@@ -12,7 +12,8 @@ storage_client = storage.Client.from_service_account_json(credentials_path)
 
 buckets = list(storage_client.list_buckets())
 
-class History(db.Model):  # Use db.Model instead of Base
+
+class History(db.Model):
     __tablename__ = "history"
     id = db.Column(db.String(255), primary_key=True, default=lambda: str(uuid4()))
     percentage = db.Column(db.DECIMAL(5, 2), nullable=False)
@@ -24,9 +25,17 @@ class History(db.Model):  # Use db.Model instead of Base
     user = relationship("User", back_populates="histories")
     disease = relationship("Disease", back_populates="histories")
 
+    def __init__(
+        self, percentage: float, user_id: str, disease_id: int, images: str
+    ) -> None:
+        self.percentage = percentage
+        self.user_id = user_id
+        self.disease_id = disease_id
+        self.images = images
+
     @classmethod
     def save_image(cls, file) -> str:
-        BUCKET_NAME = 'tomkits'
+        BUCKET_NAME = "tomkits"
 
         storage_client = storage.Client()
 
@@ -45,8 +54,12 @@ class History(db.Model):  # Use db.Model instead of Base
             print(f"Failed to upload image: {e}")
             return ""
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-class User(db.Model):  # Use db.Model instead of Base
+
+class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.String(), primary_key=True, default=lambda: str(uuid4()))
     username = db.Column(db.String(255), nullable=False)
@@ -83,7 +96,7 @@ class User(db.Model):  # Use db.Model instead of Base
         db.session.commit()
 
 
-class Disease(db.Model):  # Use db.Model instead of Base
+class Disease(db.Model):
     __tablename__ = "disease"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     disease_name = db.Column(db.String(255), nullable=False)
@@ -95,7 +108,7 @@ class Disease(db.Model):  # Use db.Model instead of Base
     histories = relationship("History", back_populates="disease")
 
 
-class Product(db.Model):  # Use db.Model instead of Base
+class Product(db.Model):
     __tablename__ = "product"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     product_name = db.Column(db.String(255), nullable=False)
@@ -109,7 +122,7 @@ class Product(db.Model):  # Use db.Model instead of Base
     disease = relationship("Disease", back_populates="products")
 
 
-class TokenBlocklist(db.Model):  # Use db.Model instead of Base
+class TokenBlocklist(db.Model):
     id = db.Column(db.String(), primary_key=True, default=lambda: str(uuid4()))
     jti = db.Column(db.String(), nullable=True)
     create_at = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -120,4 +133,3 @@ class TokenBlocklist(db.Model):  # Use db.Model instead of Base
     def save(self):
         db.session.add(self)
         db.session.commit()
-
