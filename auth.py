@@ -36,11 +36,11 @@ def login_user():
 
     data = request.get_json()
 
-    user = User.get_user_by_username(username=data.get("username"))
+    user = User.get_user_by_email(email=data.get("email"))
 
     if user and (user.check_password(password=data.get("password"))):
-        access_token = create_access_token(identity=user.username)
-        refresh_token = create_refresh_token(identity=user.username)
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
 
         return (
             jsonify(
