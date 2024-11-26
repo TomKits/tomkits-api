@@ -61,7 +61,7 @@ class History(db.Model):
 
 class User(db.Model):
     __tablename__ = "users"
-    id = db.Column(db.String(), primary_key=True, default=lambda: str(uuid4()))
+    id = db.Column(db.String(255), primary_key=True, default=lambda: str(uuid4()))
     username = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -107,6 +107,9 @@ class Disease(db.Model):
     products = relationship("Product", back_populates="disease")
     histories = relationship("History", back_populates="disease")
 
+    @classmethod
+    def get_disease_from_name(cls, disease_name: str):
+        return Disease.query.filter_by(disease_name=disease_name).first()
 
 class Product(db.Model):
     __tablename__ = "product"
@@ -120,11 +123,19 @@ class Product(db.Model):
     disease_id = db.Column(db.Integer, db.ForeignKey("disease.id", ondelete="SET NULL"))
 
     disease = relationship("Disease", back_populates="products")
-
+    
+    @classmethod
+    def get_product_from_diseaseid(cls, disease_id: int):
+        """
+        Retrieve all products associated with a specific disease ID.
+        :param disease_id: The ID of the disease.
+        :return: List of Product objects or an empty list if no products are found.
+        """
+        return cls.query.filter_by(disease_id=disease_id).all()
 
 class TokenBlocklist(db.Model):
-    id = db.Column(db.String(), primary_key=True, default=lambda: str(uuid4()))
-    jti = db.Column(db.String(), nullable=True)
+    id = db.Column(db.String(255), primary_key=True, default=lambda: str(uuid4()))
+    jti = db.Column(db.String(255), nullable=True)
     create_at = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __repr__(self):
