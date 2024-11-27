@@ -34,6 +34,10 @@ class History(db.Model):
         self.images = images
 
     @classmethod
+    def get_history_from_id(cls, id: str):
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
     def get_histories_from_user_id(cls, user_id: str):
         """
         Retrieve all history associated with a specific User ID.
@@ -121,6 +125,10 @@ class Disease(db.Model):
 
     products = relationship("Product", back_populates="disease")
     histories = relationship("History", back_populates="disease")
+
+    @classmethod
+    def get_disease_from_id(cls, id: int):
+        return cls.query.filter_by(id=id).first()
 
     @classmethod
     def get_disease_from_name(cls, disease_name: str):
