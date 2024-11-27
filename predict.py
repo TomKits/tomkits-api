@@ -67,12 +67,13 @@ def predict_disease():
             product_data = [
                 {
                     "product_name": product.product_name,
+                    "product_image": product.product_image,
                     "product_link": product.product_link,
                     "active_ingredient": product.active_ingredient,
                 }
                 for product in product_list
             ]
-
+            
             # Save the image to Google Cloud Storage
             image_url = History.save_image(image_file)
 
@@ -111,3 +112,19 @@ def predict_disease():
 
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 500
+
+@predict_bp.get("/history")
+@jwt_required()
+def histories():
+    histories = History.get_histories_from_user_id(user_id=get_jwt_identity())
+            
+    history_data = [
+        {
+            "id": history.id,
+            "disease_name": Disease.get_disease_name_from_id(disease_id=history.disease_id),
+            "image_link": history.images 
+        }
+        for history in histories
+    ]
+
+    return jsonify({"histories": history_data}), 200
