@@ -40,8 +40,12 @@ class History(db.Model):
         storage_client = storage.Client()
 
         try:
+            # Generate a unique file name
+            original_extension = file.filename.split('.')[-1]  # Get the original file extension
+            unique_filename = f"{uuid4()}.{original_extension}"  # Create a unique name
+            
             bucket = storage_client.bucket(BUCKET_NAME)
-            blob = bucket.blob(file.filename)
+            blob = bucket.blob("images/"+unique_filename)
 
             # Reset file stream before uploading
             file.stream.seek(0)
@@ -52,8 +56,7 @@ class History(db.Model):
             return blob.public_url
         except Exception as e:
             print(f"Failed to upload image: {e}")
-            return ""
-
+            return ""   
     def save(self):
         db.session.add(self)
         db.session.commit()
