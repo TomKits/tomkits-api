@@ -163,6 +163,7 @@ def history(id: str):
             {
                 "id": history.id,
                 "disease_name": disease.disease_name,
+                "confidence": f"{history.percentage}%",
                 "description": disease.description,
                 "solution": disease.solution,
                 "product_list": product_data,
