@@ -34,14 +34,33 @@ class History(db.Model):
         self.images = images
 
     @classmethod
+    def get_history_from_id(cls, id: str):
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def get_histories_from_user_id(cls, user_id: str):
+        """
+        Retrieve all history associated with a specific User ID.
+        :param user_id: The ID of the user.
+        :return: List of History objects or an empty list if no products are found.
+        """
+        return cls.query.filter_by(user_id=user_id).all()
+
+    @classmethod
     def save_image(cls, file) -> str:
         BUCKET_NAME = "tomkits"
 
         storage_client = storage.Client()
 
         try:
+            # Generate a unique file name
+            original_extension = file.filename.split(".")[
+                -1
+            ]  # Get the original file extension
+            unique_filename = f"{uuid4()}.{original_extension}"  # Create a unique name
+
             bucket = storage_client.bucket(BUCKET_NAME)
-            blob = bucket.blob(file.filename)
+            blob = bucket.blob("images/" + unique_filename)
 
             # Reset file stream before uploading
             file.stream.seek(0)
@@ -108,8 +127,18 @@ class Disease(db.Model):
     histories = relationship("History", back_populates="disease")
 
     @classmethod
+    def get_disease_from_id(cls, id: int):
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
     def get_disease_from_name(cls, disease_name: str):
         return Disease.query.filter_by(disease_name=disease_name).first()
+
+    @classmethod
+    def get_disease_name_from_id(cls, disease_id: int):
+        result = db.session.query(cls.disease_name).filter(cls.id == disease_id).first()
+        return result[0] if result else None
+
 
 class Product(db.Model):
     __tablename__ = "product"
@@ -123,7 +152,7 @@ class Product(db.Model):
     disease_id = db.Column(db.Integer, db.ForeignKey("disease.id", ondelete="SET NULL"))
 
     disease = relationship("Disease", back_populates="products")
-    
+
     @classmethod
     def get_product_from_diseaseid(cls, disease_id: int):
         """
@@ -131,7 +160,9 @@ class Product(db.Model):
         :param disease_id: The ID of the disease.
         :return: List of Product objects or an empty list if no products are found.
         """
+
         return cls.query.filter_by(disease_id=disease_id).all()
+
 
 class TokenBlocklist(db.Model):
     id = db.Column(db.String(255), primary_key=True, default=lambda: str(uuid4()))
