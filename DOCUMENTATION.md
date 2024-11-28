@@ -95,9 +95,10 @@ This endpoint allows the user to refresh the authentication token using a valid 
 -   **200 OK**  
     Success:
     ```json
-        {  
+      {  
       "new_accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
-      }```
+      }
+      ```
 **Authorization:**  
 Bearer Token  
 `<token>`
@@ -116,7 +117,8 @@ This endpoint logs out the user by invalidating the authentication token, both a
     ```json
         {  
         "message":  "access token revoked successfully"
-        }```
+        }
+       ```
 **Authorization:**  
 Bearer Token  
 `<token>`
