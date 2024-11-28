@@ -2,11 +2,11 @@
 
 ### **POST**  -  **Register**
 
-**Endpoint:**  
-`POST http://34.101.37.85:8000/auth/register`
-
-**Deskripsi:**  
-Endpoint ini digunakan untuk mendaftarkan pengguna baru ke dalam sistem. Pengguna harus menyediakan  `username`,  `email`, dan  `password`  untuk berhasil membuat akun.
+-   **Endpoint:**  
+    `POST http://34.101.37.85:8000/auth/register`
+    
+-   **Description:**  
+    This endpoint registers a new user into the system. The user must provide a  `username`,  `email`, and  `password`  to successfully create an account.
 
 **Request Body:**
 ```json
@@ -20,22 +20,22 @@ Endpoint ini digunakan untuk mendaftarkan pengguna baru ke dalam sistem. Penggun
 
 -   **201 Created**  
     Success:
-```json
-{ "message": "User registered successfully." }
-```
-**409 Conflict**  
+	```json
+	{ "message": "User registered successfully." }
+	```
+- **409 Conflict**  
 Error (User already exists):
-```json
-{ "error": "User already exists" }
-```
+	```json
+	{ "error": "User already exists" }
+	```
 
 ### **POST**  -  **User Login**
 
-**Endpoint:**  
-`POST http://34.101.37.85:8000/auth/login`
-
-**Description:**  
-This endpoint is used to authenticate an existing user. The user must provide a valid  `email`  and  `password`  to gain access.
+-   **Endpoint:**  
+    `POST http://34.101.37.85:8000/auth/login`
+    
+-   **Description:**  
+    This endpoint is used to authenticate an existing user. The user must provide a valid  `email`  and  `password`  to gain access.
 
 **Request Body:**
 ```json
@@ -57,13 +57,14 @@ Error (Invalid email or password):
 	```json
 	{ "error": "Invalid email or password." }
 	```
+
 ### **GET**  -  **User Identity (WhoAmI)**
 
-**Endpoint:**  
-`GET http://34.101.37.85:8000/auth/whoami`
-
-**Description:**  
-This endpoint retrieves the information of the currently logged-in user based on the authentication token (JWT).
+-   **Endpoint:**  
+    `GET http://34.101.37.85:8000/auth/whoami`
+    
+-   **Description:**  
+    This endpoint retrieves the information of the currently logged-in user based on the authentication token (JWT).
 
 **Responses:**
 
@@ -166,7 +167,7 @@ This endpoint predicts plant diseases based on the uploaded image. The system us
 	 ```json
 	 { "Response Text": "Token has expired ." }
 	 ```
-	 **200 OK** - Prediction successful
+-  **200 OK** - Prediction successful
 	 ```json
 	    {
 	    "confidence": "98.74%",
