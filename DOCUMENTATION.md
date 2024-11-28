@@ -70,12 +70,19 @@ This endpoint retrieves the information of the currently logged-in user based on
 -   **200 OK**  
     Success:
     ```json
-    {
-    "user_id": "<unique_user_id>",
-    "username": "Paulus Aditya Wicaksono",
-    "email": "paulusaditya22@gmail.com",
-    "created_at": "2024-11-26T14:34:12.000Z"
-    }
+	{
+
+	"message":  "message",
+
+	"user_details":  {
+
+	"email":  "paulusaditya22@gmail.com",
+
+	"username":  "Paulus Aditya Wicaksono"
+
+	}
+
+	}
     ```
     **Authorization:**  
 Bearer Token  
