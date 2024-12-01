@@ -14,21 +14,25 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.post("/register")
 def register_user():
-
     data = request.get_json()
 
-    user = User.get_user_by_email(email=data.get("email"))
+    # Validasi panjang password
+    password = data.get("password")
+    if not password or len(password) < 8:
+        return jsonify({"error": "Password must be 8 characters or longer"}), 400
 
+    # Cek apakah user sudah terdaftar
+    user = User.get_user_by_email(email=data.get("email"))
     if user is not None:
         return jsonify({"error": "User already exists"}), 409
 
+    # Membuat user baru
     new_user = User(username=data.get("username"), email=data.get("email"))
-
-    new_user.set_password(password=data.get("password"))
-
+    new_user.set_password(password=password)
     new_user.save()
 
     return jsonify({"message": "User Created!"}), 201
+
 
 
 @auth_bp.post("/login")
