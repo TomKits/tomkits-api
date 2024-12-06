@@ -58,13 +58,13 @@ def login_user():
 
     if user and (user.check_password(password=data.get("password"))):
         access_token = create_access_token(identity=user.id)
-        refresh_token = create_refresh_token(identity=user.id)
+#        refresh_token = create_refresh_token(identity=user.id)
 
         return (
             jsonify(
                 {
                     "message": "You're Logged In",
-                    "token": {"access": access_token, "refresh": refresh_token},
+                    "token": {"access": access_token},
                 }
             ),
             200,
