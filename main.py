@@ -4,12 +4,13 @@ from auth import auth_bp
 from predict import predict_bp
 from users import user_bp
 from models import User, TokenBlocklist
-
+from datetime import timedelta
 
 def create_app():
 
     app = Flask(__name__)
-
+    
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=10)
     app.config.from_prefixed_env()
 
     # initialize exts
