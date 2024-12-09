@@ -3,10 +3,70 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 import io
 
+from werkzeug.wrappers import response
+
 from models import Disease, History, Product
 
 predict_bp = Blueprint("predict", __name__)
 
+
+@predict_bp.post("/tomato")
+@jwt_required()
+def predict_tomato():
+    if "file" not in request.files:
+        return jsonify({"Response Text": "Invalid file format"}), 400
+
+    image_file = request.files["file"]
+    file_content = image_file.read()
+
+    # Prepare the file data for the request
+    file_data = {
+        "file": (
+            image_file.filename,
+            io.BytesIO(file_content),
+            image_file.mimetype,
+        )
+    }
+
+    # Reset the file stream for safety
+    image_file.stream.seek(0)
+
+    # URL of the prediction service
+    url = "http://localhost:8080/predict/quality"
+
+    try:
+        # Send POST request to the prediction service
+        response = requests.post(url, files=file_data)
+        response_data = response.json()
+
+        if "error" in response_data:
+            # Return error from the prediction service
+            return (
+                jsonify({"Response Text": response_data["error"]}),
+                response.status_code,
+            )
+
+        # Extract and format the response
+        formatted_response = {
+            "Quality": {
+                "Class": response_data.get("quality", {}).get("class", "Unknown"),
+                "Confidence": response_data.get("quality", {}).get("confidence", 0),
+            },
+            "Type": {
+                "Class": response_data.get("type", {}).get("class", "Unknown"),
+                "Confidence": response_data.get("type", {}).get("confidence", 0),
+            },
+        }
+        return jsonify(formatted_response), 200
+
+    except requests.RequestException as e:
+        # Handle connection errors or other request exceptions
+        return jsonify(
+            {
+                "Response Text": "Error connecting to prediction service",
+                "Details": str(e),
+            }
+        ), 500 
 
 @predict_bp.post("/disease")
 @jwt_required()
@@ -34,7 +94,7 @@ def predict_disease():
     image_file.stream.seek(0)
 
     # URL of the prediction service
-    url = "http://127.0.0.1:8080/predict"
+    url = "http://127.0.0.1:8080/predict/disease"
 
     try:
         # Forward the file to the prediction service
