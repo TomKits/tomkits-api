@@ -3,17 +3,22 @@
 ### **POST**  -  **Register**
 
 -   **Endpoint:**  
-    `POST http://34.101.37.85:8000/auth/register`
+    `POST http://34.50.72.127/auth/register`
     
 -   **Description:**  
-    This endpoint registers a new user into the system. The user must provide a  `username`,  `email`, and  `password`  to successfully create an account.
+    This endpoint is used to register a new user into the system. Users must provide data such as username, email, and password. If the registration is successful, the system will create a new account for the user.
+
+**Request Parameters:**
+- username (string): The username to be used for login or identification.
+- email (string): A valid email address for communication or password recovery purposes.
+- password (string): A password to be used for login.
 
 **Request Body:**
 ```json
 {
-    "username": "Paulus Aditya Wicaksono",
-    "email": "paulusaditya22@gmail.com",
-    "password": "aditya1234"
+  "username": "Umam ganteng",
+  "email": "umamgantengea@gmail.com",
+  "password": "ammanazza"
 }
 ```
 **Responses:**
@@ -32,16 +37,21 @@ Error (User already exists):
 ### **POST**  -  **User Login**
 
 -   **Endpoint:**  
-    `POST http://34.101.37.85:8000/auth/login`
+    `POST http://34.50.72.127/auth/login`
     
 -   **Description:**  
-    This endpoint is used to authenticate an existing user. The user must provide a valid  `email`  and  `password`  to gain access.
+    This endpoint is used to authenticate users who are already registered in the system. Users must provide a valid email and password to gain access to the services.
+
+**Request Parameters:**
+- email (string): email (string): The email address used during registration.
+- password (string): The password associated with the account.
+
 
 **Request Body:**
 ```json
 {
-    "email": "paulusaditya22@gmail.com",
-    "password": "aditya1234"
+  "email": "umamgantengea@gmail.com",
+  "password": "ammanazza"
 }
 ```
 **Responses:**
@@ -61,10 +71,10 @@ Error (Invalid email or password):
 ### **GET**  -  **User Identity (WhoAmI)**
 
 -   **Endpoint:**  
-    `GET http://34.101.37.85:8000/auth/whoami`
+    `GET http://34.50.72.127/auth/whoami`
     
 -   **Description:**  
-    This endpoint retrieves the information of the currently logged-in user based on the authentication token (JWT).
+    This endpoint retrieves information about the currently logged-in user based on the authentication token (JWT). It is useful for verifying user identity or displaying profile information.
 
 **Responses:**
 
@@ -72,18 +82,11 @@ Error (Invalid email or password):
     Success:
     ```json
 	{
-
-	"message":  "message",
-
-	"user_details":  {
-
-	"email":  "paulusaditya22@gmail.com",
-
-	"username":  "Paulus Aditya Wicaksono"
-
+	  "user_id": "<unique_user_id>",
+	  "username": "Paulus Aditya Wicaksono",
+	  "email": "paulusaditya22@gmail.com",
 	}
 
-	}
     ```
     **Authorization:**  
 Bearer Token  
@@ -92,10 +95,10 @@ Bearer Token
 ### **POST**  -  **Refresh Access Token**
 
 **Endpoint:**  
-`POST http://34.101.37.85:8000/auth/refresh`
+`POST http://34.50.72.127/auth/refresh`
 
 **Description:**  
-This endpoint allows the user to refresh the authentication token using a valid refresh token.
+This endpoint is used to renew or obtain a new access token (JWT) using a valid refresh token. It is helpful if the previous access token has expired but the refresh token is still active.
 
 
 **Responses:**
@@ -114,7 +117,7 @@ Bearer Token
 ### **POST**  -  **User Logout**
 
 **Endpoint:**  
-`POST http://34.101.37.85:8000/auth/logout`
+`POST http://34.50.72.127/auth/logout`
 
 **Description:**  
 This endpoint logs out the user by invalidating the authentication token, both access and refresh tokens.
@@ -134,7 +137,7 @@ Bearer Token
 ### **POST**  -  **Predict Disease**
 
 **Endpoint:**  
-`POST http://34.101.37.85:8000/predict/disease`
+`POST http://34.50.72.127/predict/disease`
 
 **Description:**  
 This endpoint predicts plant diseases based on the uploaded image. The system uses a machine learning model to analyze the image and return a disease prediction.
@@ -197,7 +200,7 @@ This endpoint predicts plant diseases based on the uploaded image. The system us
 ### **GET**  -  **Prediction History**
 
 **Endpoint:**  
-`GET http://34.101.37.85:8000/predict/history`
+`GET http://34.50.72.127/predict/history`
 
 **Description:**  
 This endpoint retrieves the history of disease predictions for the currently logged-in user.
@@ -255,7 +258,7 @@ Bearer Token
 ### **GET**  -  **Prediction Detail by ID**
 
 **Endpoint:**  
-`GET http://34.101.37.85:8000/predict/history/{prediction_id}`
+`GET http://34.50.72.127/predict/history/{prediction_id}`
 
 **Description:**  
 This endpoint provides the details of a specific prediction, including the disease name, confidence level, prediction time, and image URL.
