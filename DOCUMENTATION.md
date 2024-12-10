@@ -195,7 +195,7 @@ This endpoint predicts plant diseases based on the uploaded image. The system us
 	    ],
 	    "solusi": "Improve air circulation around the plants, prune affected leaves, and apply fungicides like azoxystrobin."
 	    }
-	    ```
+	 ```
 ### **POST**  -  **Predict Tomato**
 
 **Endpoint:**  
@@ -218,17 +218,17 @@ This endpoint is used to predict the quality and type of a tomato based on an up
     ```json
     { "Response Text": "Invalid File Format." }
     ```
- - **400 Bad Request** - Invalid file format
+- **400 Bad Request** - Invalid file format
      ```json
     { "Response Text": "Invalid File Format." }
     ```
-   - **401 Unauthorized** - Expired or invalid token
+- **401 Unauthorized** - Expired or invalid token
 	 ```json
-		{
-		    "error": "invalid_token",
-		    "message": "Signature verification failed"
-		}
-	 ```
+	{
+	"error": "invalid_token",
+	"message": "Signature verification failed"
+	}
+	```
 -  **200 OK** - Prediction successful
 	 ```json
 	{
@@ -241,7 +241,7 @@ This endpoint is used to predict the quality and type of a tomato based on an up
 	        "Confidence": 49.00272488594055
 	    }
 	}
-	    ```
+	 ```
 
 
 ### **GET**  -  **Prediction History**
