@@ -196,6 +196,53 @@ This endpoint predicts plant diseases based on the uploaded image. The system us
 	    "solusi": "Improve air circulation around the plants, prune affected leaves, and apply fungicides like azoxystrobin."
 	    }
 	    ```
+### **POST**  -  **Predict Tomato**
+
+**Endpoint:**  
+`POST http://34.50.72.127/predict/tomato`
+
+**Description:**  
+This endpoint is used to predict the quality and type of a tomato based on an uploaded image. The system uses a machine learning model to analyze the image of the tomato and classify it into categories such as ripeness and type (e.g., variety of tomato). The predictions provide confidence scores for the respective classifications.
+
+**Request:**
+
+-   **Headers:**  
+    `Content-Type: multipart/form-data`  
+    `Authorization: Bearer <token>`
+    
+-   **Body (form-data):**  
+    `file: <image-file>`
+**Responses:**
+
+-   **400 Bad Request**  - No file uploaded
+    ```json
+    { "Response Text": "Invalid File Format." }
+    ```
+ - **400 Bad Request** - Invalid file format
+     ```json
+    { "Response Text": "Invalid File Format." }
+    ```
+   - **401 Unauthorized** - Expired or invalid token
+	 ```json
+		{
+		    "error": "invalid_token",
+		    "message": "Signature verification failed"
+		}
+	 ```
+-  **200 OK** - Prediction successful
+	 ```json
+	{
+	    "Quality": {
+	        "Class": "Ripe",
+	        "Confidence": 96.78627848625183
+	    },
+	    "Type": {
+	        "Class": "cherokee_purple",
+	        "Confidence": 49.00272488594055
+	    }
+	}
+	    ```
+
 
 ### **GET**  -  **Prediction History**
 
